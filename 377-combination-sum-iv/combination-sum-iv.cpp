@@ -1,22 +1,21 @@
 class Solution {
 public:
 
-    int help(vector<int>& nums, int target, vector<int>& dp){
-        if(target == 0) return 1;
-        if(dp[target] != -1) return dp[target];
-        dp[target] = 0;
-        for(int i = 0; i < nums.size(); i++){
-            if(target - nums[i] >= 0){
-                dp[target] += help(nums, target-nums[i], dp);
+    int help(vector<int>& nums, int target){
+        vector<long long> dp(target+1, 0);
+        dp[0] = 1;
+        for(int t = 1; t <= target; t++){
+            for(int i = 0; i < nums.size(); i++){
+                if (nums[i] > t) break;
+                dp[t] += dp[t - nums[i]];
+                if(dp[t] > INT_MAX) dp[t] = INT_MAX;
             }
         }
-        return dp[target];
+        return (int)dp[target];
     }
 
     int combinationSum4(vector<int>& nums, int target) {
-        int n = nums.size();
-        vector<int> dp(target+1,-1);
         sort(nums.begin(), nums.end());
-        return help(nums, target, dp);
+        return help(nums, target);
     }
 };
