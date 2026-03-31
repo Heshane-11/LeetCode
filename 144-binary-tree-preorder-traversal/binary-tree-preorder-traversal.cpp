@@ -9,25 +9,34 @@ public:
         help(root->right, ans);
         return;
     }
-    vector<int> preorderTraversal(TreeNode* root) {
-        vector<int> ans;
-        if(root == nullptr){
-            return ans;
-        }
-        
-        stack<TreeNode*> st;
-        st.push(root);
-        while(!st.empty()){
-            TreeNode* node = st.top();
-            ans.push_back(node->val);
-            st.pop();
-            if(node->right){
-                st.push(node->right);
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> ans;
+    if (root == NULL) return ans;
+
+    TreeNode* curr = root;
+
+    while (curr != NULL) {
+        if (curr->left) {
+            TreeNode* temp = curr->left;
+
+            while (temp->right != NULL && temp->right != curr) {
+                temp = temp->right;
             }
-            if(node->left){
-                st.push(node->left);
+
+            if (temp->right == NULL) {
+                ans.push_back(curr->val);   // first time
+                temp->right = curr;
+                curr = curr->left;
+            } else {
+                temp->right = NULL;         // remove thread
+                curr = curr->right;
             }
         }
-        return ans;
+        else {
+            ans.push_back(curr->val);
+            curr = curr->right;
+        }
     }
+    return ans;
+}
 };
