@@ -1,42 +1,41 @@
 class Solution {
 public:
-    Node* dfs(Node* head){
-        Node* curr = head;
-        Node* last = NULL;
+    
+    Node* solve(Node* temp){
+        Node* forw1 = temp;   // tail tracker
 
-        while(curr){
-            Node* nextNode = curr->next;
+        while(temp){
+            Node* forw = temp->next;
 
-            // if no child
-            if(!curr->child){
-                last = curr;
-            }
-            else{
-                Node* childHead = curr->child;
-                Node* childTail = dfs(childHead);
+            if(temp->child){
+                Node* childHead = temp->child;
+                Node* childTail = solve(childHead);
 
-                // connect curr with child
-                curr->next = childHead;
-                childHead->prev = curr;
-                curr->child = NULL;
+                // connect temp with child
+                temp->next = childHead;
+                childHead->prev = temp;
+                temp->child = NULL;
 
                 // connect child tail with next
-                if(nextNode){
-                    childTail->next = nextNode;
-                    nextNode->prev = childTail;
+                if(forw){
+                    childTail->next = forw;
+                    forw->prev = childTail;
                 }
 
-                last = childTail;
+                forw1 = childTail; // update tail
+            }
+            else{
+                forw1 = temp;
             }
 
-            curr = nextNode;
+            temp = forw;
         }
-        return last;
+        return forw1; // return tail
     }
 
     Node* flatten(Node* head) {
         if(!head) return NULL;
-        dfs(head);
+        solve(head);
         return head;
     }
 };
