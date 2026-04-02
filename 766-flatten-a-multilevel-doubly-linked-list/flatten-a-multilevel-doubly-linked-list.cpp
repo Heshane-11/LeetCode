@@ -1,46 +1,42 @@
-/*
-// Definition for a Node.
-class Node {
-public:
-    int val;
-    Node* prev;
-    Node* next;
-    Node* child;
-};
-*/
-
 class Solution {
 public:
-    
-    Node* flatten(Node* head) {
-        if(!head){
-            return NULL;
-        }
-        Node* temp = head;
-        Node* forw = temp;
-        Node* forw1 = temp;
-        bool x = false;
-        while(temp){
-            if(temp->child){
-                if(temp->next){
-                    forw = temp->next;
-                    forw ->prev = NULL;
-                    x = true;
-                }
-                temp->next = temp->child;
-                temp->child->prev = temp;
-                temp->child = NULL;
-                if(x){
-                    forw1 = temp;
-                    while(forw1->next){
-                        forw1 = forw1->next;
-                    }
-                    forw1->next = forw;
-                    forw->prev = forw1;
-                    }
+    Node* dfs(Node* head){
+        Node* curr = head;
+        Node* last = NULL;
+
+        while(curr){
+            Node* nextNode = curr->next;
+
+            // if no child
+            if(!curr->child){
+                last = curr;
             }
-            temp = temp->next;
+            else{
+                Node* childHead = curr->child;
+                Node* childTail = dfs(childHead);
+
+                // connect curr with child
+                curr->next = childHead;
+                childHead->prev = curr;
+                curr->child = NULL;
+
+                // connect child tail with next
+                if(nextNode){
+                    childTail->next = nextNode;
+                    nextNode->prev = childTail;
+                }
+
+                last = childTail;
+            }
+
+            curr = nextNode;
         }
+        return last;
+    }
+
+    Node* flatten(Node* head) {
+        if(!head) return NULL;
+        dfs(head);
         return head;
     }
 };
