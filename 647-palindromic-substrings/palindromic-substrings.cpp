@@ -1,24 +1,22 @@
 class Solution {
 public:
-    bool palin(string& s, int i, int j, vector<vector<bool>>& dp){
-        if(i > j){
-            return true;
-        }
-        if(dp[i][j]){
-            return true;
-        }
-        if(s[i] == s[j]){
-            return dp[i][j] = palin(s, i+1, j-1, dp);
-        }
-        return dp[i][j] = false;
-    }
     int countSubstrings(string s) {
         int n = s.length();
         vector<vector<bool>> dp(n, vector<bool>(n, false));
         int cnt = 0;
-        for(int i = 0; i < n; i++){
-            for(int j  = i; j < n; j++){
-                if(palin(s, i, j, dp)){
+        for(int l = 1; l <= n; l++){ 
+            for(int i = 0; i <= n-l; i++){
+                int j = i+l-1;
+                if(i == j){
+                    dp[i][j] = true;
+                }
+                else if(j-i == 1){
+                    dp[i][j] = (s[i] == s[j]);
+                }
+                else{
+                    dp[i][j] = (s[i] == s[j] && dp[i+1][j-1]);
+                }
+                if(dp[i][j]){
                     cnt++;
                 }
             }
