@@ -65,7 +65,6 @@ public:
         stack<int> st;
 
         // NSL (Previous Smaller)
-        while(!st.empty()) st.pop();
 
         for(int i = 0; i < n; i++) {
             while(!st.empty() && arr[st.top()] > arr[i]) {
