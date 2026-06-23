@@ -34,12 +34,46 @@
 //         return false;
 //     }
 // };
+// sc = O(n), TC = O(n2)
+
+/*
+appr 2: sabse pehle nums array ko sort krke ek dusre array mein daldia iss kya hua k jo uska ith shifted array hoga uske jth element ki value hogi nums[(i+j) % n]
+*/
+
+
+
+// class Solution {
+// public:
+//     bool check(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> sorted(n);
+//         for(int i = 0; i < n; i++){
+//             sorted[i] = nums[i];
+//         }
+//         sort(sorted.begin(), sorted.end());
+        
+//         for(int i = 0; i < n; i++){
+//             bool is = true;
+//             for(int j = 0; j < n; j++){
+//                 if(sorted[j] != nums[(i+j) % n]){
+//                     is = false;
+//                 }
+//             }
+//             if(is){
+//                 return true;
+//             }
+//         }
+//         return false;
+//     }
+// };
+// sc = O(n), TC = O(n2)[but n2 se thodi kam h]
+
+
 
 
 /*
-appr 2: 
+optimal appr: 
 */
-
 
 
 class Solution {
@@ -47,22 +81,22 @@ public:
     bool check(vector<int>& nums) {
         int n = nums.size();
         vector<int> sorted(n);
+        int mini = 100, idx = 0;
         for(int i = 0; i < n; i++){
-            sorted[i] = nums[i];
+            if(i>0 && nums[i] == mini && nums[i-1] == mini){
+                continue;
+            }
+            mini = min(mini, nums[i]);
+            if(mini == nums[i]){
+                idx = i;
+            }
         }
-        sort(sorted.begin(), sorted.end());
         
-        for(int i = 0; i < n; i++){
-            bool is = true;
-            for(int j = 0; j < n; j++){
-                if(sorted[j] != nums[(i+j) % n]){
-                    is = false;
-                }
-            }
-            if(is){
-                return true;
+        for(int i = idx; i < idx + n-1; i++){
+            if(nums[i%n] > nums[(i+1)%n]){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 };
