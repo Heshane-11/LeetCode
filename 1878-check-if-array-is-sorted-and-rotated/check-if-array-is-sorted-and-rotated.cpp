@@ -72,31 +72,57 @@ appr 2: sabse pehle nums array ko sort krke ek dusre array mein daldia iss kya h
 
 
 /*
-optimal appr: 
+optimal appr: Start from the minimum element and verify that all elements are in ascending order in circular traversal.
 */
 
+
+// class Solution {
+// public:
+//     bool check(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> sorted(n);
+//         int mini = 100, idx = 0;
+//         for(int i = 0; i < n; i++){
+//             if(i>0 && nums[i] == mini && nums[i-1] == mini){
+//                 continue;
+//             }
+//             mini = min(mini, nums[i]);
+//             if(mini == nums[i]){
+//                 idx = i;
+//             }
+//         }
+        
+//         for(int i = idx; i < idx + n-1; i++){
+//             if(nums[i%n] > nums[(i+1)%n]){
+//                 return false;
+//             }
+//         }
+//         return true;
+//     }
+// };
+
+// sc = O(1), TC = O(n)
+
+
+
+// ek aur optimal approach hai:: finding peaks in our array: if 1 se jada peak h matlb array is not sort.
 
 class Solution {
 public:
     bool check(vector<int>& nums) {
         int n = nums.size();
         vector<int> sorted(n);
-        int mini = 100, idx = 0;
+        int peak;
         for(int i = 0; i < n; i++){
-            if(i>0 && nums[i] == mini && nums[i-1] == mini){
-                continue;
-            }
-            mini = min(mini, nums[i]);
-            if(mini == nums[i]){
-                idx = i;
-            }
-        }
-        
-        for(int i = idx; i < idx + n-1; i++){
-            if(nums[i%n] > nums[(i+1)%n]){
-                return false;
+            if(nums[i] > nums[(i+1)%n]){
+                peak++;
+                if(peak > 1){
+                    return false;
+                }
             }
         }
         return true;
     }
 };
+
+// sc = O(1), TC = O(n)
