@@ -1,21 +1,23 @@
 class Solution {
 public:
-
-    void solve(int idx, vector<int>& nums, int sum, int &cnt, int &target){
-        if(idx == nums.size()){
-            if(sum == target){
-                cnt++;
-            }
-            return;
+    int solve(vector<int>& nums, int target, int sum, int i, int &totalsum){
+        if(i == nums.size()){
+            return (2 * sum - totalsum == target);
         }
-            solve(idx+1, nums, sum+nums[idx], cnt, target);
-            solve(idx+1, nums, sum-nums[idx], cnt, target);
-        return;
-    }
 
+        if(i >= nums.size()){
+            return 0;
+        }
+
+        int take = solve(nums, target, sum+nums[i], i+1, totalsum);
+        int notake = solve(nums, target, sum, i+1, totalsum);
+
+        return take+notake;
+
+    }
     int findTargetSumWays(vector<int>& nums, int target) {
-        int cnt = 0;
-        solve(0, nums, 0, cnt, target);
-        return cnt;
+        int n = nums.size();
+        int totalsum = accumulate(nums.begin(), nums.end(), 0);
+        return solve(nums, target, 0, 0, totalsum);
     }
 };
